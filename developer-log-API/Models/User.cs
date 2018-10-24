@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
-namespace MusicAPI.Models
+namespace developer_log_API.Models
 {
   public class User : IdentityUser
   {

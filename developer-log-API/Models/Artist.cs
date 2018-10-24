@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace MusicAPI.Models
+namespace developer_log_API.Models
 {
     public class Artist {
         [Key]

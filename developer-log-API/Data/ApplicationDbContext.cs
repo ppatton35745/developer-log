@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MusicAPI.Models;
+using developer_log_API.Models;
 
-namespace MusicAPI.Data {
+namespace developer_log_API.Data {
     public class ApplicationDbContext : IdentityDbContext {
         public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options) : base (options) { }
 
