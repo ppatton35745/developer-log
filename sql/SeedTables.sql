@@ -8,43 +8,32 @@
 --CREATE TABLE RESOURCE_ATTRIBUTE (
 --CREATE TABLE RESOURCE_TYPE_ATTRIBUTE (
 --CREATE TABLE RESOURCE_ATTRIBUTE_VALUE (
-USE MyDevLog
+USE DeveloperLog
 
-INSERT INTO [USER] VALUES ('phil@phil.net','phil','patton','phil')
+--INSERT INTO [USER] VALUES ('phil@phil.net','phil','patton','phil')
 
-INSERT INTO TOPIC VALUES ('React'),
-	('Bootstrap'),
-	('Grunt'),
-	('Browserify'),
-	('Jquery'),
-	('React Piano'),
-	('Razor Views'),
-	('Dotnet API'),
-	('Razor Views'),
-	('Bulma')
+INSERT INTO Topic VALUES ('17166ffa-231b-4e98-8cd2-b38eff68aee0','React'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Bootstrap'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Grunt'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Browserify'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Jquery'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','React Piano'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Razor Views'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Dotnet API'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Razor Views'),
+	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Bulma')
 
-INSERT INTO USER_TOPIC VALUES (1, 1),
-	(1,2),
-	(1,3),
-	(1,4),
-	(1,5),
-	(1,6),
-	(1,7),
-	(1,8),
-	(1,9),
-	(1,10)
-
-INSERT INTO RESOURCE_TYPE VALUES ('Project'),
+INSERT INTO ResourceType VALUES ('Project'),
 	('Book')
 
-INSERT INTO [RESOURCE] VALUES (1, 'Project1')
-	,(1, 'Project2')
-	,(1, 'Project3')
-	,(2, 'Book1')
-	,(2, 'Book2')
-	,(2, 'Book3')
+INSERT INTO [Resource] VALUES ('17166ffa-231b-4e98-8cd2-b38eff68aee0',1, 'Project1')
+	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',1, 'Project2')
+	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',1, 'Project3')
+	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',2, 'Book1')
+	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',2, 'Book2')
+	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',2, 'Book3')
 
-INSERT INTO RESOURCE_TOPIC VALUES (1, 2)
+INSERT INTO ResourceTopic VALUES (1, 2)
 	,(1, 5)
 	,(2, 7)
 	,(2, 8)
@@ -57,22 +46,17 @@ INSERT INTO RESOURCE_TOPIC VALUES (1, 2)
 	,(6, 3)
 	,(6, 7)
 
-INSERT INTO USER_RESOURCE VALUES (1, 1)
-	,(2, 1)
-	,(3, 1)
-	,(4, 1)
-	,(5, 1)
-	,(6, 1)
 
-INSERT INTO RESOURCE_ATTRIBUTE VALUES ('ISBN')
+
+INSERT INTO ResourceAttribute VALUES ('ISBN')
 	,('Amazon Link')
 	,('Github Repo URL')
 
-INSERT INTO RESOURCE_TYPE_ATTRIBUTE VALUES (1, 3)
+INSERT INTO ResourceTypeAttribute VALUES (1, 3)
 	,(2, 1)
 	,(2, 2)
 
-INSERT INTO RESOURCE_ATTRIBUTE_VALUE VALUES (2,1,'GithubRepoProj1')
+INSERT INTO ResourceAttributeValue VALUES (2,1,'GithubRepoProj1')
 	,(2,2,'GithubRepoProj2')
 	,(2,3,'GithubRepoProj3')
 	,(1,4,'AmazonLinkBook1')

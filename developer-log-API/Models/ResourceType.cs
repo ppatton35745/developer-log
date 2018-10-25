@@ -12,7 +12,7 @@ namespace developer_log_API.Models
         public int ResourceTypeId { get; set; }
 
         [Required]
-        public int Name { get; set; }
+        public string Name { get; set; }
 
         public virtual ICollection<Resource> Resources { get; set; }
         public virtual ICollection<ResourceTypeAttribute> ResourceTypeAttributes { get; set; }
