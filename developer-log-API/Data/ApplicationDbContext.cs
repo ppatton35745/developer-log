@@ -10,10 +10,7 @@ namespace developer_log_API.Data {
         public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options) : base (options) { }
 
         public DbSet<User> User { get; set; }
-        public DbSet<Song> Song { get; set; }
-        public DbSet<Album> Album { get; set; }
-        public DbSet<Artist> Artist { get; set; }
-        public DbSet<Genre> Genre { get; set; }
-
+        public DbSet<Resource> Resource { get; set; }
+        public DbSet<Topic> Topic { get; set; }
     }
 }
