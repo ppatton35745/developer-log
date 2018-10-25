@@ -9,15 +9,15 @@ namespace developer_log_API.Models
     public class ResourceAttributeValue
     {
         [Key]
-        public int ResourceAttributeValueID { get; set; }
+        public int ResourceAttributeValueId { get; set; }
 
         [Required]
-        public int ResourceTypeAttributeID { get; set; }
+        public int ResourceTypeAttributeId { get; set; }
 
         public ResourceTypeAttribute ResourceTypeAttribute { get; set; }
 
         [Required]
-        public int ResourceID { get; set; }
+        public int ResourceId { get; set; }
 
         public Resource Resource { get; set; }
 

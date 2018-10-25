@@ -9,7 +9,7 @@ namespace developer_log_API.Models
     public class ResourceAttribute
     {
         [Key]
-        public int ResourceAttributeID { get; set; }
+        public int ResourceAttributeId { get; set; }
 
         [Required]
         [StringLength(50)]

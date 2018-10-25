@@ -9,15 +9,15 @@ namespace developer_log_API.Models
     public class Resource
     {
         [Key]
-        public int ResourceID { get; set; }
+        public int ResourceId { get; set; }
 
         [Required]
-        public int UserID { get; set; }
+        public string UserId { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         [Required]
-        public int ResourceTypeID { get; set; }
+        public int ResourceTypeId { get; set; }
 
         public ResourceType ResourceType { get; set; }
 

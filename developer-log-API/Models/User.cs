@@ -12,5 +12,9 @@ namespace developer_log_API.Models
 
     [Required]
     public string LastName { get; set; }
-  }
+
+    public virtual ICollection<Topic> Topics { get; set; }
+
+    public virtual ICollection<Resource> Resources { get; set; }
+    }
 }

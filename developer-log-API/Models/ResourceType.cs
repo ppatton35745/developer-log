@@ -9,7 +9,7 @@ namespace developer_log_API.Models
     public class ResourceType
     {
         [Key]
-        public int ResourceTypeID { get; set; }
+        public int ResourceTypeId { get; set; }
 
         [Required]
         public int Name { get; set; }

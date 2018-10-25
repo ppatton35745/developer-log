@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using developer_log_API.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace developer_log_API.Data {
     public class ApplicationDbContext : IdentityDbContext {
@@ -59,6 +60,24 @@ namespace developer_log_API.Data {
                 .HasMany(r => r.ResourceTypeAttributes)
                 .WithOne(r => r.ResourceAttribute)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            User user = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                FirstName = "Phil",
+                LastName = "Patton",
+                UserName = "phil@phil.com",
+                NormalizedUserName = "PHIL@PHIL.COM",
+                Email = "phil@phil.com",
+                NormalizedEmail = "PHIL@PHIL.COM",
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                SecurityStamp = Guid.NewGuid().ToString("D")
+            };
+
+            var passwordHash = new PasswordHasher<User>();
+            user.PasswordHash = passwordHash.HashPassword(user, "phil");
+            modelBuilder.Entity<User>().HasData(user);
         }
     }
 }

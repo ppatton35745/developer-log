@@ -10,15 +10,15 @@ namespace developer_log_API.Models
     public class ResourceTopic
     {
         [Key]
-        public int ResourceTopicID { get; set; }
+        public int ResourceTopicId { get; set; }
 
         [Required]
-        public int TopicID { get; set; }
+        public int TopicId { get; set; }
 
         public Topic Topic { get; set; }
 
         [Required]
-        public int ResourceID { get; set; }
+        public int ResourceId { get; set; }
 
         public Resource Resource { get; set; }
 

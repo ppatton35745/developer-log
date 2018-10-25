@@ -9,12 +9,12 @@ namespace developer_log_API.Models
     public class Topic
     {
         [Key]
-        public int TopicID { get; set; }
+        public int TopicId { get; set; }
 
         [Required]
-        public int UserID { get; set; }
+        public string UserId { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         [Required]
         [StringLength(50)]
