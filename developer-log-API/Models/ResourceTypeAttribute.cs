@@ -4,17 +4,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace developer-log-API.Models
+namespace developer_log_API.Models
 {
     public class ResourceTypeAttribute
-{
-    [Key]
-    public int ResourceTypeAttributeID { get; set; }
+    {
+        [Key]
+        public int ResourceTypeAttributeID { get; set; }
 
-    [Required]
-    public int ResourceTypeID { get; set; }
+        [Required]
+        public int ResourceTypeID { get; set; }
 
-    [Required]
-    public int ResourceAttributeID { get; set; }
-}
+        [Required]
+        public int ResourceAttributeID { get; set; }
+    }
 }

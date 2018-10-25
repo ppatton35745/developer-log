@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace developer-log-API.Models
+namespace developer_log_API.Models
 {
     public class ResourceType
-{
-    [Key]
-    public int ResourceTypeID { get; set; }
+    {
+        [Key]
+        public int ResourceTypeID { get; set; }
 
-    [Required]
-    public int Name { get; set; }
-}
+        [Required]
+        public int Name { get; set; }
+    }
 }
