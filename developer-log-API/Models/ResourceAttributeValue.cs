@@ -14,8 +14,12 @@ namespace developer_log_API.Models
         [Required]
         public int ResourceTypeAttributeID { get; set; }
 
+        public ResourceTypeAttribute ResourceTypeAttribute { get; set; }
+
         [Required]
         public int ResourceID { get; set; }
+
+        public Resource Resource { get; set; }
 
         [Required]
         [StringLength(50)]

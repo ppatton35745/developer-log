@@ -14,6 +14,8 @@ namespace developer_log_API.Models
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
+
+        public virtual ICollection<ResourceTypeAttribute> ResourceTypeAttributes { get; set; }
     }
 }
 
