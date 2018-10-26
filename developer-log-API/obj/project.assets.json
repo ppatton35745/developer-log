@@ -13349,9 +13349,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\phil\\workspace\\developer-log\\developer-log-API\\developer-log-API.csproj",
-      "projectName": "developer-log-API",
-      "projectPath": "C:\\Users\\phil\\workspace\\developer-log\\developer-log-API\\developer-log-API.csproj",
+      "projectUniqueName": "C:\\Users\\phil\\workspace\\developer-log\\developer-log-API\\developer_log_API.csproj",
+      "projectName": "developer_log_API",
+      "projectPath": "C:\\Users\\phil\\workspace\\developer-log\\developer-log-API\\developer_log_API.csproj",
       "packagesPath": "C:\\Users\\phil\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\phil\\workspace\\developer-log\\developer-log-API\\obj\\",
       "projectStyle": "PackageReference",

@@ -1,0 +1,15 @@
+C:\Users\phil\workspace\developer-log\developer-log-API\bin\Debug\netcoreapp2.1\developer_log_API.deps.json
+C:\Users\phil\workspace\developer-log\developer-log-API\bin\Debug\netcoreapp2.1\developer_log_API.runtimeconfig.json
+C:\Users\phil\workspace\developer-log\developer-log-API\bin\Debug\netcoreapp2.1\developer_log_API.runtimeconfig.dev.json
+C:\Users\phil\workspace\developer-log\developer-log-API\bin\Debug\netcoreapp2.1\developer_log_API.dll
+C:\Users\phil\workspace\developer-log\developer-log-API\bin\Debug\netcoreapp2.1\developer_log_API.pdb
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.csproj.CoreCompileInputs.cache
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.RazorAssemblyInfo.cache
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.RazorAssemblyInfo.cs
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.AssemblyInfoInputs.cache
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.AssemblyInfo.cs
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.RazorTargetAssemblyInfo.cache
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.dll
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.pdb
+C:\Users\phil\workspace\developer-log\developer-log-API\obj\Debug\netcoreapp2.1\developer_log_API.csprojAssemblyReference.cache

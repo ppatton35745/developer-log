@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace MusicAPI.Controllers
+namespace developer_log_API.Controllers
 {
 
     [Route("/api/token")]
