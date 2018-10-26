@@ -10,43 +10,48 @@
 --CREATE TABLE RESOURCE_ATTRIBUTE_VALUE (
 USE DeveloperLog
 
+DECLARE @UserId varchar(100)
+SET @UserId = 'a3b7f423-9bff-4bf4-a397-d332e60d52bb'
+
+SELECT * FROM AspNetUsers
+
 --INSERT INTO [USER] VALUES ('phil@phil.net','phil','patton','phil')
 
-INSERT INTO Topic VALUES ('17166ffa-231b-4e98-8cd2-b38eff68aee0','React'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Bootstrap'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Grunt'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Browserify'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Jquery'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','React Piano'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Razor Views'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Dotnet API'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Razor Views'),
-	('17166ffa-231b-4e98-8cd2-b38eff68aee0','Bulma')
+INSERT INTO Topic VALUES (@UserId,'React'),
+	(@UserId,'Bootstrap'),
+	(@UserId,'Grunt'),
+	(@UserId,'Browserify'),
+	(@UserId,'Jquery'),
+	(@UserId,'React Piano'),
+	(@UserId,'Razor Views'),
+	(@UserId,'Dotnet API'),
+	(@UserId,'Razor Views'),
+	(@UserId,'Bulma')
 
 INSERT INTO ResourceType VALUES ('Project'),
 	('Book')
 
-INSERT INTO [Resource] VALUES ('17166ffa-231b-4e98-8cd2-b38eff68aee0',1, 'Project1')
-	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',1, 'Project2')
-	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',1, 'Project3')
-	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',2, 'Book1')
-	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',2, 'Book2')
-	,('17166ffa-231b-4e98-8cd2-b38eff68aee0',2, 'Book3')
+INSERT INTO [Resource] VALUES (@UserId,1, 'Project1')
+	,(@UserId,1, 'Project2')
+	,(@UserId,1, 'Project3')
+	,(@UserId,2, 'Book1')
+	,(@UserId,2, 'Book2')
+	,(@UserId,2, 'Book3')
 
-INSERT INTO ResourceTopic VALUES (1, 2)
-	,(1, 5)
-	,(2, 7)
-	,(2, 8)
-	,(3, 9)
-	,(3, 10)
-	,(4, 1)
-	,(4, 3)
-	,(5, 4)
-	,(5, 6)
-	,(6, 3)
-	,(6, 7)
+	SELECT * FROM [Resource]
 
-
+INSERT INTO ResourceTopic VALUES (2, 1)
+	,(5, 1)
+	,(7, 2)
+	,(8, 2)
+	,(9, 3)
+	,(10, 3)
+	,(1, 4)
+	,(3, 4)
+	,(4, 5)
+	,(6, 5)
+	,(3, 6)
+	,(7, 6)
 
 INSERT INTO ResourceAttribute VALUES ('ISBN')
 	,('Amazon Link')

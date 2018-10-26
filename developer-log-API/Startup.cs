@@ -48,7 +48,8 @@ namespace developer_log_API
                    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddCors(o => o.AddPolicy("DeveloperLogPolicy", builder => {
-                builder.WithOrigins("http://localhost:3000")
+                //builder.WithOrigins("http://localhost:3000")
+                builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
