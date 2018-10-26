@@ -10,6 +10,7 @@ using developer_log_API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace developer_log_API.Controllers
 {
@@ -32,13 +33,31 @@ namespace developer_log_API.Controllers
         // GET: api/Topics
         [HttpGet]
         [Authorize]
-        public async Task<IEnumerable<Topic>> GetTopic()
+        //public IEnumerable<Topic> GetTopic()
+        public string GetTopic()
         {
-            //User curUser = await GetCurrentUserAsync();
+            //string userName = User.Identity.Name;
+            //User user = _context.User.Single(u => u.UserName == userName);
+            //return _context.Topic
+            //        .Where(t => t.UserId == user.Id);
+
             string userName = User.Identity.Name;
             User user = _context.User.Single(u => u.UserName == userName);
-            return _context.Topic
+            var rTopics = _context.Topic
                     .Where(t => t.UserId == user.Id);
+
+            var json = JsonConvert.SerializeObject(new { topics = rTopics });
+            return json;
+            /* Example of customizing the JSON response
+           var dbSongs = _context.Song
+               .Include(s => s.Genre)
+               .Include(s => s.Artist)
+               .Include(s => s.Album)
+               ;
+
+           var json = JsonConvert.SerializeObject(new { songs = dbSongs });
+           return json;
+            */
         }
 
         // GET: api/Topics/5
