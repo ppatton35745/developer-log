@@ -23,14 +23,17 @@ namespace developer_log_API.Controllers
     {
         private ApplicationDbContext _context;
         private readonly SignInManager<User> _signInManager;
+        private UserManager<User> _userManager;
 
         public TokenController(
             ApplicationDbContext ctx,
-            SignInManager<User> signInManager
+            SignInManager<User> signInManager,
+            UserManager<User> userManager
         )
         {
             _context = ctx;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [HttpGet]

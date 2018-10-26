@@ -9,6 +9,7 @@ using developer_log_API.Data;
 using developer_log_API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace developer_log_API.Controllers
 {
@@ -33,9 +34,11 @@ namespace developer_log_API.Controllers
         [Authorize]
         public async Task<IEnumerable<Topic>> GetTopic()
         {
-            User curUser = await GetCurrentUserAsync();
+            //User curUser = await GetCurrentUserAsync();
+            string userName = User.Identity.Name;
+            User user = _context.User.Single(u => u.UserName == userName);
             return _context.Topic
-                    .Where(t => t.UserId == curUser.Id);
+                    .Where(t => t.UserId == user.Id);
         }
 
         // GET: api/Topics/5
