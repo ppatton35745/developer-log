@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using developer_log_API.Data;
 
-namespace developerlogAPI.Migrations
+namespace developer_log_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -338,7 +338,7 @@ namespace developerlogAPI.Migrations
                     b.HasDiscriminator().HasValue("User");
 
                     b.HasData(
-                        new { Id = "a3b7f423-9bff-4bf4-a397-d332e60d52bb", AccessFailedCount = 0, ConcurrencyStamp = "fdd42e26-28c5-4ef7-a1aa-05c1c58c398f", Email = "phil@phil.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "PHIL@PHIL.COM", NormalizedUserName = "PHIL@PHIL.COM", PasswordHash = "AQAAAAEAACcQAAAAEO63/cBG3AVpUh2/XGXk5I9znM2/Z0CCtTwDtHmGqPDGD+SIcrDm9XN4evP+g6e84A==", PhoneNumberConfirmed = false, SecurityStamp = "25a1f47a-7dca-41e8-b32f-0e07c50dc4e7", TwoFactorEnabled = false, UserName = "phil@phil.com", FirstName = "Phil", LastName = "Patton" }
+                        new { Id = "48ca9c8d-5575-43f4-8042-d9f2710ce87c", AccessFailedCount = 0, ConcurrencyStamp = "51a94c50-0796-4394-82ff-c2618a6ea24d", Email = "phil@phil.com", EmailConfirmed = true, LockoutEnabled = false, NormalizedEmail = "PHIL@PHIL.COM", NormalizedUserName = "PHIL@PHIL.COM", PasswordHash = "AQAAAAEAACcQAAAAED0Uku61p9FTHOm1CftYxYCOBcPHzSABjB8HA1M97EdG8RRZDnJ6nBHKq5NcFh4Z7g==", PhoneNumberConfirmed = false, SecurityStamp = "f35d28cb-3abc-45ef-b091-8f50b748a323", TwoFactorEnabled = false, UserName = "phil@phil.com", FirstName = "Phil", LastName = "Patton" }
                     );
                 });
 

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace developerlogAPI.Migrations
+namespace developer_log_API.Migrations
 {
     public partial class firstMigration : Migration
     {
@@ -311,7 +311,7 @@ namespace developerlogAPI.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "FirstName", "LastName" },
-                values: new object[] { "a3b7f423-9bff-4bf4-a397-d332e60d52bb", 0, "fdd42e26-28c5-4ef7-a1aa-05c1c58c398f", "User", "phil@phil.com", true, false, null, "PHIL@PHIL.COM", "PHIL@PHIL.COM", "AQAAAAEAACcQAAAAEO63/cBG3AVpUh2/XGXk5I9znM2/Z0CCtTwDtHmGqPDGD+SIcrDm9XN4evP+g6e84A==", null, false, "25a1f47a-7dca-41e8-b32f-0e07c50dc4e7", false, "phil@phil.com", "Phil", "Patton" });
+                values: new object[] { "48ca9c8d-5575-43f4-8042-d9f2710ce87c", 0, "51a94c50-0796-4394-82ff-c2618a6ea24d", "User", "phil@phil.com", true, false, null, "PHIL@PHIL.COM", "PHIL@PHIL.COM", "AQAAAAEAACcQAAAAED0Uku61p9FTHOm1CftYxYCOBcPHzSABjB8HA1M97EdG8RRZDnJ6nBHKq5NcFh4Z7g==", null, false, "f35d28cb-3abc-45ef-b091-8f50b748a323", false, "phil@phil.com", "Phil", "Patton" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
