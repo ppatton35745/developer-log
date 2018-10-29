@@ -17,13 +17,13 @@ namespace developer_log_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TopicsController : ControllerBase
+    public class ResourceTypesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
         private readonly UserManager<User> _userManager;
 
-        public TopicsController(ApplicationDbContext context, UserManager<User> userManager)
+        public ResourceTypesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -35,51 +35,27 @@ namespace developer_log_API.Controllers
         [HttpGet]
         [Authorize]
         //public IEnumerable<Topic> GetTopic()
-        public List<aTopic> GetTopic()
+        public List<aResourceType> GetResourceTypes()
         {
             string userName = User.Identity.Name;
             User user = _context.User.Single(u => u.UserName == userName);
 
-            List<aTopic> items = _context.Topic
-                .Where(x => x.UserId == user.Id)
-                .Select(x => new aTopic
+            List<aResourceType> items = _context.ResourceType
+                .Where(x => x.Resources.Where(r => r.UserId == user.Id).Count() > 0)
+                .Select(x => new aResourceType
                 {
-                    TopicId = x.TopicId,
+                    ResourceTypeId = x.ResourceTypeId,
                     Name = x.Name
                 })
                 .ToList();
 
             return items;
-            
-            //return _context.Topic
-            //        .Where(t => t.UserId == user.Id)
-            //        .ToList();
-
-            //string userName = User.Identity.Name;
-            //User user = _context.User.Single(u => u.UserName == userName);
-            //var rTopics = _context.Topic
-            //        .Where(t => t.UserId == user.Id);
-
-            //var json = JsonConvert.SerializeObject(new { topics = rTopics });
-            //return json;
-
-
-            /* Example of customizing the JSON response
-           var dbSongs = _context.Song
-               .Include(s => s.Genre)
-               .Include(s => s.Artist)
-               .Include(s => s.Album)
-               ;
-
-           var json = JsonConvert.SerializeObject(new { songs = dbSongs });
-           return json;
-            */
         }
 
         // GET: api/Topics/5
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetTopic([FromRoute] int id)
+        public async Task<IActionResult> GetResourceType([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {

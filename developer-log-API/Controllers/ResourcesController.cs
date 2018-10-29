@@ -17,13 +17,13 @@ namespace developer_log_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TopicsController : ControllerBase
+    public class ResourcesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
         private readonly UserManager<User> _userManager;
 
-        public TopicsController(ApplicationDbContext context, UserManager<User> userManager)
+        public ResourcesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -35,25 +35,29 @@ namespace developer_log_API.Controllers
         [HttpGet]
         [Authorize]
         //public IEnumerable<Topic> GetTopic()
-        public List<aTopic> GetTopic()
+        public List<Resource> GetResources()
         {
             string userName = User.Identity.Name;
             User user = _context.User.Single(u => u.UserName == userName);
 
-            List<aTopic> items = _context.Topic
-                .Where(x => x.UserId == user.Id)
-                .Select(x => new aTopic
-                {
-                    TopicId = x.TopicId,
-                    Name = x.Name
-                })
-                .ToList();
+            //List<aResource> items = _context.Resource
+            //    .Where(x => x.UserId == user.Id)
+            //    .Select(x => new aResource
+            //    {
+            //        ResourceId = x.ResourceId,
+            //        Name = x.Name,
+            //        Attributes = x.ResourceAttributeValues
+            //    })
+            //    .ToList();
 
-            return items;
-            
-            //return _context.Topic
-            //        .Where(t => t.UserId == user.Id)
-            //        .ToList();
+            //return items;
+
+            return _context.Resource
+                    .Where(t => t.UserId == user.Id && t.ResourceId == 1)
+                    .Include(r => r.ResourceAttributeValues)
+                        .ThenInclude(rav => rav.ResourceTypeAttribute)
+                            .ThenInclude(ra => ra.ResourceAttribute)
+                    .ToList();
 
             //string userName = User.Identity.Name;
             //User user = _context.User.Single(u => u.UserName == userName);
