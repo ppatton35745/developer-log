@@ -15,7 +15,7 @@ namespace developer_log_API.ApiModels
         [StringLength(50)]
         public string Name { get; set; }
 
-        public Dictionary<string, string> Attributes { get; set; }
+        public Dictionary<string, string> Attributes { get; set; } = new Dictionary<string, string>();
        
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,13 +13,16 @@ namespace developer_log_API.Models
         public int ResourceAttributeValueId { get; set; }
 
         [Required]
+        //[JsonIgnore]
         public int ResourceTypeAttributeId { get; set; }
 
+        //[JsonIgnore]
         public ResourceTypeAttribute ResourceTypeAttribute { get; set; }
 
         [Required]
         public int ResourceId { get; set; }
 
+        //[JsonIgnore]
         public Resource Resource { get; set; }
 
         [Required]
