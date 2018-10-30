@@ -37,7 +37,15 @@ export default class ApplicationViews extends Component {
             }
           }}
         />
-        <Route exact path="/Login" component={Login} />
+        <Route
+          exact
+          path="/Login"
+          render={props => {
+            return <Login setUser={props.setUser} />;
+          }}
+          component={Login}
+          setUser={this.props.setUser}
+        />
         <Route exact path="/Signup" component={Signup} />
         <Route
           path="/Topics/:TopicId"

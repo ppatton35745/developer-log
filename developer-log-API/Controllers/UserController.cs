@@ -34,7 +34,9 @@ namespace ChattrApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetUser()
         {
-            User currentUser = await GetCurrentUserAsync();
+            string userName = User.Identity.Name;
+            User currentUser =  _context.User.Single(u => u.UserName == userName);
+           
             return Ok(currentUser);
         }
     }

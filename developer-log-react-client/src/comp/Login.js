@@ -32,7 +32,18 @@ export default class Login extends Component {
       .then(OfficialAPIToken => {
         localStorage.setItem("DevLogToken", OfficialAPIToken);
       });
+
+    fetch("http://localhost:5000/api/User", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Athorization: `Bearer ${localStorage.getItem("DevLogToken")}`
+      }
+    }).then(resp => this.props.setUser(resp["firstName"]));
   };
+
+  setUser() {}
 
   render() {
     return (
