@@ -164,7 +164,7 @@ namespace developer_log_API.Controllers
             }
         }
 
-        // GET: api/Topics/5
+        // GET: api/Resources/5
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetResource([FromRoute] int id)
@@ -195,7 +195,7 @@ namespace developer_log_API.Controllers
         // PUT: api/Topics/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutTopic([FromRoute] int id, [FromBody] Topic topic)
+        public async Task<IActionResult> PutResource([FromRoute] int id, [FromBody] Topic topic)
         {
             if (!ModelState.IsValid)
             {
@@ -228,20 +228,74 @@ namespace developer_log_API.Controllers
             return NoContent();
         }
 
-        // POST: api/Topics
+        // POST: api/Resources
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> PostTopic([FromBody] Topic topic)
+        public async Task<IActionResult> PostResource([FromBody] Resource resource)
         {
-            if (!ModelState.IsValid)
+            string userName = User.Identity.Name;
+            User user = _context.User.Single(u => u.UserName == userName);
+
+            string sql = $@"INSERT INTO Resource
+            (UserId, ResourceTypeId, Name)
+            VALUES
+            ('{user.Id}', '{resource.ResourceTypeId}', '{resource.Name}');
+            select MAX(ResourceId) from Resource";
+
+            using (IDbConnection conn = Connection)
             {
-                return BadRequest(ModelState);
+                var resourceId = (await conn.QueryAsync<int>(sql)).Single();
+                resource.ResourceId = resourceId;
+                //return CreatedAtRoute("GetResource", new { id = resourceId }, resource);
             }
 
-            _context.Topic.Add(topic);
-            await _context.SaveChangesAsync();
+            sql = $@"INSERT INTO ResourceTopic
+            (ResourceId, TopicId)
+            VALUES \n";
 
-            return CreatedAtAction("GetTopic", new { id = topic.TopicId }, topic);
+            for (int i = 0; i < resource.ResourceTopics.Count; i++)
+            {
+                if (i == 0)
+                {
+                    sql += $"({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) \n";
+                }
+                else
+                {
+                    sql += $",({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) \n";
+                }
+            }
+
+            sql += $"SELECT Max(ResourceTopicId) FROM ResourceTopic;";
+
+            using (IDbConnection conn = Connection)
+            {
+                var resourceTopicId = (await conn.QueryAsync<int>(sql)).Single();
+                //return CreatedAtRoute("GetResource", new { id = resourceId }, resource);
+            }
+
+            sql = $@"INSERT INTO ResourceAttributeValue
+            ( ResourceId, ResourceTypeAttributeId, Value)
+            VALUES \n";
+
+            for (int i = 0; i < resource.ResourceAttributeValues.Count; i++)
+            {
+                if (i == 0)
+                {
+                    sql += $@"({resource.ResourceId}, 
+                                {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
+                                {resource.ResourceAttributeValues.ElementAt(i).Value}) \n";
+                }
+                else
+                {
+                    sql += $@",({resource.ResourceId}, 
+                                {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
+                                {resource.ResourceAttributeValues.ElementAt(i).Value}) \n";
+                }
+            }
+
+            sql += $"SELECT Max(ResourceAttributeValueId) FROM ResourceAttributeValue;";
+
+            return CreatedAtRoute("GetResource", new { id = resource.ResourceId }, resource);
         }
 
         // DELETE: api/Topics/5
