@@ -12,7 +12,7 @@ namespace developer_log_API.Models
         [Key]
         public int ResourceId { get; set; }
 
-        [Required]
+        //[Required]
         public string UserId { get; set; }
 
         //[JsonIgnore]

@@ -165,7 +165,7 @@ namespace developer_log_API.Controllers
         }
 
         // GET: api/Resources/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetResource")]
         [Authorize]
         public async Task<IActionResult> GetResource([FromRoute] int id)
         {
@@ -192,40 +192,111 @@ namespace developer_log_API.Controllers
             return Ok(resource);
         }
 
-        // PUT: api/Topics/5
+        // PUT: api/Resource/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutResource([FromRoute] int id, [FromBody] Topic topic)
+        public async Task<IActionResult> PutResource([FromRoute] int id, [FromBody] Resource resource)
         {
+            int resourceUpdated;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != topic.TopicId)
+            if (id != resource.ResourceId)
             {
                 return BadRequest();
-            }
+            } 
 
-            _context.Entry(topic).State = EntityState.Modified;
+            string sql = $@"DELETE rt
+                        FROM ResourceTopic rt
+                        WHERE rt.ResourceId = {id} ";
 
-            try
+            sql += $@"DELETE 
+                        FROM ResourceAttributeValue
+                        WHERE ResourceId = {id} ";
+
+            string sql2 = $@"UPDATE r
+                            SET r.Name = '{resource.Name}'
+                            FROM [Resource] r
+                            WHERE ResourceId = {id} ";
+
+            Console.WriteLine(sql);
+
+            using (IDbConnection conn = Connection)
             {
-                await _context.SaveChangesAsync();
+                await conn.ExecuteAsync(sql);
+                resourceUpdated = await conn.ExecuteAsync(sql2);
             }
-            catch (DbUpdateConcurrencyException)
+
+            if (resource.ResourceTopics.Count > 0)
             {
-                if (!TopicExists(id))
+
+
+                sql = $@"INSERT INTO ResourceTopic
+                            (ResourceId, TopicId)
+                            VALUES ";
+
+                for (int i = 0; i < resource.ResourceTopics.Count; i++)
                 {
-                    return NotFound();
+                    if (i == 0)
+                    {
+                        sql += $"({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) ";
+                    }
+                    else
+                    {
+                        sql += $",({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) ";
+                    }
                 }
-                else
+
+                sql += $"SELECT Max(ResourceTopicId) FROM ResourceTopic;";
+
+                using (IDbConnection conn = Connection)
                 {
-                    throw;
+                    var resourceTopicId = (await conn.QueryAsync<int>(sql)).Single();
+                }
+
+            }
+
+            if (resource.ResourceAttributeValues.Count > 0)
+            {
+                sql = $@"INSERT INTO ResourceAttributeValue
+                ( ResourceId, ResourceTypeAttributeId, Value)
+                VALUES ";
+
+                for (int i = 0; i < resource.ResourceAttributeValues.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        sql += $@"({resource.ResourceId}, 
+                                {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
+                                '{resource.ResourceAttributeValues.ElementAt(i).Value}') ";
+                    }
+                    else
+                    {
+                        sql += $@",({resource.ResourceId}, 
+                                {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
+                                '{resource.ResourceAttributeValues.ElementAt(i).Value}') ";
+                    }
+                }
+
+                sql += $"SELECT Max(ResourceAttributeValueId) FROM ResourceAttributeValue;";
+
+                using (IDbConnection conn = Connection)
+                {
+                    var resourceAttributeValueId = (await conn.QueryAsync<int>(sql)).Single();
                 }
             }
 
-            return NoContent();
+            if (resourceUpdated > 0)
+            {
+                return new StatusCodeResult(StatusCodes.Status204NoContent);
+            }
+            else
+            {
+                throw new Exception("No rows affected");
+            }
         }
 
         // POST: api/Resources
@@ -251,17 +322,17 @@ namespace developer_log_API.Controllers
 
             sql = $@"INSERT INTO ResourceTopic
             (ResourceId, TopicId)
-            VALUES \n";
+            VALUES ";
 
             for (int i = 0; i < resource.ResourceTopics.Count; i++)
             {
                 if (i == 0)
                 {
-                    sql += $"({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) \n";
+                    sql += $"({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) ";
                 }
                 else
                 {
-                    sql += $",({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) \n";
+                    sql += $",({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) ";
                 }
             }
 
@@ -275,7 +346,7 @@ namespace developer_log_API.Controllers
 
             sql = $@"INSERT INTO ResourceAttributeValue
             ( ResourceId, ResourceTypeAttributeId, Value)
-            VALUES \n";
+            VALUES ";
 
             for (int i = 0; i < resource.ResourceAttributeValues.Count; i++)
             {
@@ -283,46 +354,53 @@ namespace developer_log_API.Controllers
                 {
                     sql += $@"({resource.ResourceId}, 
                                 {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
-                                {resource.ResourceAttributeValues.ElementAt(i).Value}) \n";
+                                '{resource.ResourceAttributeValues.ElementAt(i).Value}') ";
                 }
                 else
                 {
                     sql += $@",({resource.ResourceId}, 
                                 {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
-                                {resource.ResourceAttributeValues.ElementAt(i).Value}) \n";
+                                '{resource.ResourceAttributeValues.ElementAt(i).Value}') ";
                 }
             }
 
             sql += $"SELECT Max(ResourceAttributeValueId) FROM ResourceAttributeValue;";
 
-            return CreatedAtRoute("GetResource", new { id = resource.ResourceId }, resource);
+            Console.WriteLine(sql);
+            Console.ReadLine();
+
+            using (IDbConnection conn = Connection)
+            {
+                var resourceAttributeValueId = (await conn.QueryAsync<int>(sql)).Single();
+                return CreatedAtRoute("GetResource", new { id = resource.ResourceId }, resource);
+            }
+            
         }
 
         // DELETE: api/Topics/5
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteTopic([FromRoute] int id)
+        public async Task<IActionResult> DeleteResource([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
+            string sql = $@"
+                DELETE FROM [ResourceTopic] WHERE ResourceId = {id};
+                DELETE FROM ResourceAttributeValue WHERE ResourceId = {id};
+                DELETE FROM [Resource] WHERE ResourceId = {id};";
+
+            using (IDbConnection conn = Connection)
             {
-                return BadRequest(ModelState);
+                int resourceDeleted = await conn.ExecuteAsync(sql);
+                if (resourceDeleted > 0)
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                throw new Exception("No rows affected");
             }
-
-            var topic = await _context.Topic.FindAsync(id);
-            if (topic == null)
-            {
-                return NotFound();
-            }
-
-            _context.Topic.Remove(topic);
-            await _context.SaveChangesAsync();
-
-            return Ok(topic);
         }
 
-        private bool TopicExists(int id)
+        private bool ResourceExists(int id)
         {
-            return _context.Topic.Any(e => e.TopicId == id);
+            return _context.Resource.Any(e => e.ResourceId == id);
         }
     }
 }
