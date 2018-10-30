@@ -47,7 +47,7 @@ namespace developer_log_API.Controllers
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         [HttpGet]
-        public async Task<IActionResult> Get(string topic)
+        public async Task<IActionResult> GetResources(int? resourceTypeId, int? topicId)
         {
             string sql = $@"SELECT rt.ResourceTypeId
 	                            ,rt.Name 
@@ -62,7 +62,29 @@ namespace developer_log_API.Controllers
                             JOIN ResourceTypeAttribute rta on rta.ResourceTypeId = rt.ResourceTypeId
 	                            JOIN ResourceAttribute ra on ra.ResourceAttributeId = rta.ResourceAttributeId
                             JOIN [Resource] r on r.ResourceTypeId = rt.ResourceTypeId
-	                            JOIN ResourceAttributeValue rav on rav.ResourceTypeAttributeId = rta.ResourceTypeAttributeId and rav.ResourceId = r.ResourceId";
+	                            JOIN ResourceAttributeValue rav on rav.ResourceTypeAttributeId = rta.ResourceTypeAttributeId and rav.ResourceId = r.ResourceId
+                                LEFT JOIN ResourceTopic rtop on rtop.ResourceId = r.ResourceId
+                            WHERE 1=1 ";
+
+            if (resourceTypeId != null)
+            {
+                sql += $"AND rt.ResourceTypeId = {resourceTypeId} ";
+            }
+
+            if (topicId != null)
+            {
+                sql += $"AND rtop.TopicId = {topicId} ";
+            }
+
+            sql += $@"GROUP BY rt.ResourceTypeId
+	                    ,rt.Name 
+	                    ,rta.ResourceTypeAttributeId
+	                    ,ra.ResourceAttributeId
+	                    ,ra.Name 
+	                    ,r.ResourceId
+	                    ,r.Name 
+	                    ,rav.ResourceAttributeValueId
+	                    ,rav.Value";
 
             Console.WriteLine(sql);
 
@@ -90,11 +112,6 @@ namespace developer_log_API.Controllers
 
                             // add to resource types dictionary
                             resourceTypes.Add(thisResourceType.ResourceTypeId, thisResourceType);
-
-                            //// new resource type, reset lists
-                            //resources.Clear();
-                            //resourceTypeAttributes.Clear();
-                            //resourceAttributeValues.Clear();
                         }
 
                         ResourceTypeAttribute thisResourceTypeAttribute;
@@ -104,6 +121,8 @@ namespace developer_log_API.Controllers
                         {
                             // resource type attribute has not been assigned to resource type, assign to placeholder
                             thisResourceTypeAttribute = resourceTypeAttribute;
+
+                            // Assign attribute for ease of use
                             thisResourceTypeAttribute.ResourceAttribute = resourceAttribute;
                             thisResourceTypeAttribute.ResourceAttributeId = resourceAttribute.ResourceAttributeId;
 
@@ -115,121 +134,62 @@ namespace developer_log_API.Controllers
 
                         Resource thisResource;
 
-                        // has this resource type attribute already been added to this resourceType??
+                        // has this resource already been added to this resourceType??
                         if (!resources.TryGetValue(resource.ResourceId, out thisResource))
                         {
                             
-                            // resource type attribute has not been assigned to resource type, assign to placeholder
+                            // resource has not been assigned to resource type, assign to placeholder
                             thisResource = resource;
+
+                            // instantiate list for attribute values for resource
                             thisResource.ResourceAttributeValues = new List<ResourceAttributeValue>();
-                            // add this resource type attribute to the resource type
+                            
+                            // add this resource to the resource type
                             thisResourceType.Resources.Add(thisResource);
-                            // add to the resource type attribute dictionary, already on resource type
+                            
+                            // add to the resource dictionary, already on resource type
                             resources.Add(thisResource.ResourceId, thisResource);
                         }
 
+                        // resource attribute values are lowest layer of query will be unique no need to test
+                        thisResourceTypeAttribute.ResourceAttribute = resourceAttribute;
+                        resourceAttributeValue.ResourceTypeAttribute = thisResourceTypeAttribute;
+                        resourceAttributeValue.ResourceTypeAttributeId = resourceTypeAttribute.ResourceTypeAttributeId;
+                        
                         thisResource.ResourceAttributeValues.Add(resourceAttributeValue);
 
-
-                        //thisResourceType.ResourceTypeAttributes.Add(resourceTypeAttribute);
-                        //thisResourceType.Resources.Add(resource);
                         return thisResourceType;
                     }, splitOn: "ResourceTypeAttributeId,ResourceAttributeId,ResourceId,ResourceAttributeValueId");
                 return Ok(resourceTypeQuery.Distinct());
             }
         }
 
-
-        //// GET: api/Topics
-        //[HttpGet]
-        //[Authorize]
-        ////public IEnumerable<Topic> GetTopic()
-        //public List<aResource> GetResources()
-        //{
-        //    string userName = User.Identity.Name;
-        //    User user = _context.User.Single(u => u.UserName == userName);
-
-        //    List<aResource> items = new List<aResource>();
-        //    items = _context.Resource
-        //        .Where(x => x.UserId == user.Id && x.ResourceId == 1)
-        //                .Include(rav => rav.ResourceAttributeValues) // attribute values
-        //                    .ThenInclude(rta => rta.ResourceTypeAttribute) // join between attributes and type
-        //                        .ThenInclude(ra => ra.ResourceAttribute) // attribute names 
-        //        .Select(x => new aResource
-        //        {
-        //            ResourceId = x.ResourceId,
-        //            Name = x.Name,
-        //            Attributes = x.ResourceAttributeValues.ToDictionary(d => d.ResourceTypeAttribute
-        //                                                                    .ResourceAttribute
-        //                                                                    .Name,
-        //                                                                d => d.Value)
-        //        })
-        //        .ToList();
-
-        //    return items;
-
-        //    //shoppingCart.LineItems =
-        //    //    from op in _context.OrderProduct
-        //    //    join p in _context.Product
-        //    //    on op.ProductId equals p.ProductId
-        //    //    where op.OrderId == shoppingCart.Order.OrderId
-        //    //    group new { p, op } by p into pList
-        //    //    select new OrderLineItem()
-        //    //    {
-        //    //        Product = pList.Key,
-        //    //        Units = pList.Select(x => x.p.ProductId).Count(),
-        //    //        Cost = pList.Select(x => x.p.ProductId).Count() * pList.Key.Price,
-        //    //        orderProducts = pList.Select(x => x.op).ToList()
-        //    //    }
-        //    //     ;
-
-        //    //return _context.Resource
-        //    //        .Where(t => t.UserId == user.Id)
-        //    //        .Include(rt => rt.ResourceType)
-        //    //        .Include(r => r.ResourceAttributeValues)
-        //    //            .ThenInclude(rav => rav.ResourceTypeAttribute)
-        //    //                .ThenInclude(ra => ra.ResourceAttribute)
-        //    //        .ToList();
-
-        //    //string userName = User.Identity.Name;
-        //    //User user = _context.User.Single(u => u.UserName == userName);
-        //    //var rTopics = _context.Topic
-        //    //        .Where(t => t.UserId == user.Id);
-
-        //    //var json = JsonConvert.SerializeObject(new { topics = rTopics });
-        //    //return json;
-
-
-        //    /* Example of customizing the JSON response
-        //   var dbSongs = _context.Song
-        //       .Include(s => s.Genre)
-        //       .Include(s => s.Artist)
-        //       .Include(s => s.Album)
-        //       ;
-
-        //   var json = JsonConvert.SerializeObject(new { songs = dbSongs });
-        //   return json;
-        //    */
-        //}
-
         // GET: api/Topics/5
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetTopic([FromRoute] int id)
+        public async Task<IActionResult> GetResource([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var topic = await _context.Topic.FindAsync(id);
+            var resource = await _context.Resource
+            .Include(x => x.ResourceType)
+                .ThenInclude(y => y.ResourceTypeAttributes)
+                    .ThenInclude(z => z.ResourceAttribute)
+            .Include(x => x.ResourceTopics)
+                .ThenInclude(y => y.Topic)
+            .Include(x => x.ResourceAttributeValues)
+            .Where(x => x.ResourceId == id)
+            .SingleAsync();
 
-            if (topic == null)
+            if (resource == null)
             {
                 return NotFound();
             }
 
-            return Ok(topic);
+            return Ok(resource);
         }
 
         // PUT: api/Topics/5

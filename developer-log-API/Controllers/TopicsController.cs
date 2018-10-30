@@ -35,18 +35,13 @@ namespace developer_log_API.Controllers
         [HttpGet]
         [Authorize]
         //public IEnumerable<Topic> GetTopic()
-        public List<aTopic> GetTopic()
+        public List<Topic> GetTopic()
         {
             string userName = User.Identity.Name;
             User user = _context.User.Single(u => u.UserName == userName);
 
-            List<aTopic> items = _context.Topic
+            List<Topic> items = _context.Topic
                 .Where(x => x.UserId == user.Id)
-                .Select(x => new aTopic
-                {
-                    TopicId = x.TopicId,
-                    Name = x.Name
-                })
                 .ToList();
 
             return items;

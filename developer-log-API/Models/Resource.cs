@@ -28,6 +28,8 @@ namespace developer_log_API.Models
         public string Name { get; set; }
 
         public virtual ICollection<ResourceTopic> ResourceTopics { get; set; }
+
+        //[JsonIgnore]
         public virtual ICollection<ResourceAttributeValue> ResourceAttributeValues { get; set; }
     }
 }

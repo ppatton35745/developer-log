@@ -31,22 +31,16 @@ namespace developer_log_API.Controllers
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        // GET: api/Topics
+        // GET: api/ResourceTypes
         [HttpGet]
         [Authorize]
-        //public IEnumerable<Topic> GetTopic()
-        public List<aResourceType> GetResourceTypes()
+        public List<ResourceType> GetResourceTypes()
         {
             string userName = User.Identity.Name;
             User user = _context.User.Single(u => u.UserName == userName);
 
-            List<aResourceType> items = _context.ResourceType
+            List<ResourceType> items = _context.ResourceType
                 .Where(x => x.Resources.Where(r => r.UserId == user.Id).Count() > 0)
-                .Select(x => new aResourceType
-                {
-                    ResourceTypeId = x.ResourceTypeId,
-                    Name = x.Name
-                })
                 .ToList();
 
             return items;

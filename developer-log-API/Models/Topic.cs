@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace developer_log_API.Models
         [Required]
         public string UserId { get; set; }
 
+        [JsonIgnore]
         public virtual User User { get; set; }
 
         [Required]
