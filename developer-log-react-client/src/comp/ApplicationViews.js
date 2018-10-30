@@ -22,7 +22,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return <TopicList />;
             } else {
-              return <Login />;
+              return <Login setUser={this.props.setUser} />;
             }
           }}
         />
@@ -33,7 +33,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return <TopicList />;
             } else {
-              return <Login />;
+              return <Login setUser={this.props.setUser} />;
             }
           }}
         />
@@ -41,12 +41,17 @@ export default class ApplicationViews extends Component {
           exact
           path="/Login"
           render={props => {
-            return <Login setUser={props.setUser} />;
+            return <Login setUser={this.props.setUser} />;
           }}
-          component={Login}
           setUser={this.props.setUser}
         />
-        <Route exact path="/Signup" component={Signup} />
+        <Route
+          exact
+          path="/Signup"
+          render={props => {
+            return <Signup setUser={this.props.setUser} />;
+          }}
+        />
         <Route
           path="/Topics/:TopicId"
           render={props => {
@@ -58,7 +63,7 @@ export default class ApplicationViews extends Component {
                 />
               );
             } else {
-              return <Login />;
+              return <Login setUser={this.props.setUser} />;
             }
           }}
         />
@@ -69,7 +74,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return <ResourceTypeList />;
             } else {
-              return <Login />;
+              return <Login setUser={this.props.setUser} />;
             }
           }}
         />
@@ -85,7 +90,7 @@ export default class ApplicationViews extends Component {
                 />
               );
             } else {
-              return <Login />;
+              return <Login setUser={this.props.setUser} />;
             }
           }}
         />
@@ -96,7 +101,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return <Resource />;
             } else {
-              return <Login />;
+              return <Login setUser={this.props.setUser} />;
             }
           }}
         />

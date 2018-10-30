@@ -15,7 +15,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <NavBar currentUser={this.state.currentUser} />
+        <NavBar currentUser={this.state.currentUser} setUser={this.setUser} />
         <ApplicationViews setUser={this.setUser} />
       </React.Fragment>
     );

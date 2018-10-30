@@ -31,16 +31,20 @@ export default class Login extends Component {
       .then(res => res.text())
       .then(OfficialAPIToken => {
         localStorage.setItem("DevLogToken", OfficialAPIToken);
-      });
-
-    fetch("http://localhost:5000/api/User", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Athorization: `Bearer ${localStorage.getItem("DevLogToken")}`
-      }
-    }).then(resp => this.props.setUser(resp["firstName"]));
+        return OfficialAPIToken;
+      })
+      .then(tok =>
+        fetch("http://localhost:5000/api/User", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${tok}`
+          }
+        })
+          .then(resp => resp.json())
+          .then(resp => this.props.setUser(resp["firstName"]))
+      );
   };
 
   setUser() {}
