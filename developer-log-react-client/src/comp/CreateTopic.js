@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import APIManager from "./APIManager";
+import APIManager from "../api/APIManager";
 import { Redirect } from "react-router-dom";
 
 export default class CreateTopic extends Component {
@@ -11,14 +11,21 @@ export default class CreateTopic extends Component {
   componentDidMount() {}
 
   handleFieldChange = evt => {
-    const stateToChange = {};
+    const stateToChange = { topic: {} };
     stateToChange.topic[evt.target.id] = evt.target.value;
     this.setState(stateToChange);
   };
-
-  createNewTopic = () => {
+  //   createNewTopic = e => {
+  //     e.preventDefault();
+  //     APIManager.createNewTopic(this.state.topic);
+  //   };
+  createNewTopic = e => {
+    e.preventDefault();
     APIManager.createNewTopic(this.state.topic).then(response => {
-      console.log(response);
+      this.setState({
+        topic: response,
+        submitted: true
+      });
     });
   };
 
@@ -26,7 +33,7 @@ export default class CreateTopic extends Component {
     if (this.state.submitted === false) {
       return (
         <React.Fragment>
-          <form onSubmit={this.createNewTopic}>
+          <form onSubmit={e => this.createNewTopic(e)}>
             <h3>Add New Topic</h3>
             <label htmlFor="newTopic">New Topic</label>
             <input
@@ -44,10 +51,10 @@ export default class CreateTopic extends Component {
       return (
         <Redirect
           to={{
-            pathname: `/topics/${this.state.topic["topicId"]}`,
-            state: {
-              topic: this.state.topic
-            }
+            pathname: "/Topics"
+            // state: {
+            //   topic: this.state.topic
+            // }
           }}
         />
       );

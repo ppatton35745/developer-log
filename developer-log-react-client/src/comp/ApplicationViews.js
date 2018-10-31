@@ -7,6 +7,7 @@ import ResourceType from "./ResourceType";
 import Resource from "./Resource";
 import Login from "./Login";
 import Signup from "./Signup";
+import CreateTopic from "./CreateTopic";
 
 export default class ApplicationViews extends Component {
   // Check if credentials are in local storage
@@ -130,12 +131,7 @@ export default class ApplicationViews extends Component {
           path="/CreateTopic"
           render={props => {
             if (this.isAuthenticated()) {
-              return (
-                <Resource
-                  key={props.location.state.resource["resourceId"]}
-                  resource={props.location.state.resource}
-                />
-              );
+              return <CreateTopic />;
             } else {
               return <Redirect to="/Login" />;
             }

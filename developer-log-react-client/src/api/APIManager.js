@@ -58,6 +58,7 @@ const APIManager = {
   },
 
   createNewTopic: topic => {
+    console.log(topic);
     return fetch(`http://localhost:5000/api/Topics`, {
       method: "POST",
       headers: {
@@ -65,7 +66,7 @@ const APIManager = {
         Accept: "application/json",
         Authorization: `Bearer ${localStorage.getItem("DevLogToken")}`
       },
-      body: topic
+      body: JSON.stringify(topic)
     }).then(resp => resp.json());
   }
 };
