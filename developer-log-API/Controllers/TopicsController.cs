@@ -46,30 +46,6 @@ namespace developer_log_API.Controllers
                 .ToList();
 
             return items;
-            
-            //return _context.Topic
-            //        .Where(t => t.UserId == user.Id)
-            //        .ToList();
-
-            //string userName = User.Identity.Name;
-            //User user = _context.User.Single(u => u.UserName == userName);
-            //var rTopics = _context.Topic
-            //        .Where(t => t.UserId == user.Id);
-
-            //var json = JsonConvert.SerializeObject(new { topics = rTopics });
-            //return json;
-
-
-            /* Example of customizing the JSON response
-           var dbSongs = _context.Song
-               .Include(s => s.Genre)
-               .Include(s => s.Artist)
-               .Include(s => s.Album)
-               ;
-
-           var json = JsonConvert.SerializeObject(new { songs = dbSongs });
-           return json;
-            */
         }
 
         // GET: api/Topics/5
@@ -133,6 +109,11 @@ namespace developer_log_API.Controllers
         [Authorize]
         public async Task<IActionResult> PostTopic([FromBody] Topic topic)
         {
+            string userName = User.Identity.Name;
+            User user = _context.User.Single(u => u.UserName == userName);
+
+            topic.UserId = user.Id;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

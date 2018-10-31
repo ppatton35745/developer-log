@@ -25,20 +25,27 @@ export default class TopicList extends Component {
   render() {
     return (
       <React.Fragment>
-        {this.state.topics.map(topic => (
-          <Link
-            key={topic["topicId"]}
-            className="topic-link"
-            to={{
-              pathname: `/topics/${topic["topicId"]}`,
-              state: {
-                topic: topic
-              }
-            }}
-          >
-            {topic["name"]}
-          </Link>
-        ))}
+        <h3>Topics</h3>
+        <button>
+          <Link to="/CreateTopic">New Topic</Link>
+        </button>
+        <ul>
+          {this.state.topics.map(topic => (
+            <li key={topic["topicId"]}>
+              <Link
+                className="topic-link"
+                to={{
+                  pathname: `/topics/${topic["topicId"]}`,
+                  state: {
+                    topic: topic
+                  }
+                }}
+              >
+                {topic["name"]}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </React.Fragment>
     );
   }

@@ -58,12 +58,6 @@ export default class ApplicationViews extends Component {
                 />
               );
             }
-            // return (
-            //   <Login
-            //     setUser={this.props.setUser}
-            //     currentUser={this.state.currentUser}
-            //   />
-            // );
           }}
           setUser={this.props.setUser}
         />
@@ -81,7 +75,6 @@ export default class ApplicationViews extends Component {
               return (
                 <Topic
                   key={props.location.state.topic["topicId"]}
-                  location={props.location.state.location}
                   topic={props.location.state.topic}
                 />
               );
@@ -107,13 +100,12 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return (
                 <ResourceType
-                  key={props.location.state.animal.id}
-                  animal={props.location.state.animal}
-                  // checkOutAnimal={props.location.state.checkOutAnimal}
+                  key={props.location.state.resourceType["resourceTypeId"]}
+                  resourceType={props.location.state.resourceType}
                 />
               );
             } else {
-              return <Login setUser={this.props.setUser} />;
+              return <Redirect to="/Login" />;
             }
           }}
         />
@@ -122,7 +114,28 @@ export default class ApplicationViews extends Component {
           path="/Resources/:ResourceId"
           render={props => {
             if (this.isAuthenticated()) {
-              return <Resource />;
+              return (
+                <Resource
+                  key={props.location.state.resource["resourceId"]}
+                  resource={props.location.state.resource}
+                />
+              );
+            } else {
+              return <Redirect to="/Login" />;
+            }
+          }}
+        />
+        <Route
+          exact
+          path="/CreateTopic"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <Resource
+                  key={props.location.state.resource["resourceId"]}
+                  resource={props.location.state.resource}
+                />
+              );
             } else {
               return <Redirect to="/Login" />;
             }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import APIManager from "../api/APIManager";
+import { Link } from "react-router-dom";
 
 export default class Topic extends Component {
   state = {
@@ -29,13 +29,15 @@ export default class Topic extends Component {
         {this.state.topicResourceTypes.map(topicResourceType => (
           <React.Fragment>
             <h2>{topicResourceType["name"]}</h2>
-            <table class="table">
+            <table className="table">
               <thead>
                 <tr>
                   <th>Name</th>
                   {topicResourceType["resourceTypeAttributes"].map(
                     resourceTypeAttribute => (
-                      <th>
+                      <th
+                        key={resourceTypeAttribute["resourceTypeAttributeId"]}
+                      >
                         {resourceTypeAttribute["resourceAttribute"]["name"]}
                       </th>
                     )
@@ -45,10 +47,29 @@ export default class Topic extends Component {
               <tbody>
                 {topicResourceType["resources"].map(resource => (
                   <tr>
-                    <td>{resource["name"]}</td>
+                    <td>
+                      <Link
+                        // key={resource["resourceId"]}
+                        className="topic-link"
+                        to={{
+                          pathname: `/Resources/${resource["resourceId"]}`,
+                          state: {
+                            resource: resource
+                          }
+                        }}
+                      >
+                        {resource["name"]}
+                      </Link>
+                    </td>
                     {resource["resourceAttributeValues"].map(
                       resourceAttributeValue => (
-                        <td>{resourceAttributeValue["value"]}</td>
+                        <td
+                          key={
+                            resourceAttributeValue["resourceAttributeValueId"]
+                          }
+                        >
+                          {resourceAttributeValue["value"]}
+                        </td>
                       )
                     )}
                   </tr>
@@ -60,22 +81,4 @@ export default class Topic extends Component {
       </React.Fragment>
     );
   }
-}
-
-{
-  /* <table class="table">
-    <thead>
-        <tr>
-            <th>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                
-            </td>
-        </tr>
-    </tbody>
-</table> */
 }
