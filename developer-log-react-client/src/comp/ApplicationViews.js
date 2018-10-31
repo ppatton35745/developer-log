@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import React, { Component } from "react";
 import TopicList from "./TopicList";
 import Topic from "./Topic";
@@ -10,7 +10,14 @@ import Signup from "./Signup";
 
 export default class ApplicationViews extends Component {
   // Check if credentials are in local storage
-  isAuthenticated = () => localStorage.getItem("DevLogToken") !== null;
+  isAuthenticated = () => {
+    return (
+      localStorage.getItem("DevLogToken") !== null &&
+      sessionStorage.getItem("currentUser") !== null
+    );
+  };
+
+  // blah blah git test
 
   render() {
     return (
@@ -22,7 +29,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return <TopicList />;
             } else {
-              return <Login setUser={this.props.setUser} />;
+              return <Redirect to="/Login" />;
             }
           }}
         />
@@ -33,7 +40,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return <TopicList />;
             } else {
-              return <Login setUser={this.props.setUser} />;
+              return <Redirect to="/Login" />;
             }
           }}
         />
@@ -41,7 +48,22 @@ export default class ApplicationViews extends Component {
           exact
           path="/Login"
           render={props => {
-            return <Login setUser={this.props.setUser} />;
+            if (this.isAuthenticated()) {
+              return <Redirect to="/" />;
+            } else {
+              return (
+                <Login
+                  setUser={this.props.setUser}
+                  currentUser={this.props.currentUser}
+                />
+              );
+            }
+            // return (
+            //   <Login
+            //     setUser={this.props.setUser}
+            //     currentUser={this.state.currentUser}
+            //   />
+            // );
           }}
           setUser={this.props.setUser}
         />
@@ -58,12 +80,13 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return (
                 <Topic
-                  key={props.location.state.location.id}
+                  key={props.location.state.topic["topicId"]}
                   location={props.location.state.location}
+                  topic={props.location.state.topic}
                 />
               );
             } else {
-              return <Login setUser={this.props.setUser} />;
+              return <Redirect to="/Login" />;
             }
           }}
         />
@@ -74,7 +97,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return <ResourceTypeList />;
             } else {
-              return <Login setUser={this.props.setUser} />;
+              return <Redirect to="/Login" />;
             }
           }}
         />
@@ -101,7 +124,7 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return <Resource />;
             } else {
-              return <Login setUser={this.props.setUser} />;
+              return <Redirect to="/Login" />;
             }
           }}
         />

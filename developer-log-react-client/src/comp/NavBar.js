@@ -3,17 +3,16 @@ import { Link } from "react-router-dom";
 import { Navbar as RsNavBar } from "reactstrap";
 export default class NavBar extends Component {
   logOut() {
-    const user = "";
-    this.props.setUser(user);
     localStorage.removeItem("DevLogToken");
+    sessionStorage.removeItem("currentUser");
   }
   render() {
-    if (this.props.currentUser.length > 0) {
+    if (sessionStorage.getItem("currentUser") !== null) {
       return (
         <RsNavBar>
-          <Link to="/TopicList">Topics</Link>
-          <Link to="/ResourceTypeList">Resources</Link>
-          <label>Welcome {this.props.currentUser}</label>
+          <Link to="/Topics">Topics</Link>
+          <Link to="/ResourceTypes">Resources</Link>
+          <label>Welcome {sessionStorage.getItem("currentUser")}</label>
           <Link to="/Login" onClick={this.logOut}>
             Log Out
           </Link>
@@ -22,8 +21,8 @@ export default class NavBar extends Component {
     }
     return (
       <RsNavBar>
-        <Link to="/TopicList">Topics</Link>
-        <Link to="/ResourceTypeList">Resources</Link>
+        <Link to="/Topics">Topics</Link>
+        <Link to="/ResourceTypes">Resources</Link>
         <Link to="/Login">Login</Link>
         <Link to="/Signup">Signup</Link>
       </RsNavBar>

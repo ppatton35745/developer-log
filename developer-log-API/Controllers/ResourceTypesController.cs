@@ -11,11 +11,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Cors;
 
 namespace developer_log_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("DeveloperLogPolicy")]
     public class ResourceTypesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

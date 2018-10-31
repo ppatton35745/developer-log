@@ -16,7 +16,10 @@ class App extends Component {
     return (
       <React.Fragment>
         <NavBar currentUser={this.state.currentUser} setUser={this.setUser} />
-        <ApplicationViews setUser={this.setUser} />
+        <ApplicationViews
+          currentUser={this.state.currentUser}
+          setUser={this.setUser}
+        />
       </React.Fragment>
     );
   }

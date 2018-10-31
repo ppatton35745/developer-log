@@ -15,11 +15,13 @@ using Dapper;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Cors;
 
 namespace developer_log_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("DeveloperLogPolicy")]
     public class ResourcesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
