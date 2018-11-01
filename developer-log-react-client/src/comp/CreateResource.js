@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import APIManager from "../api/APIManager";
 import { Redirect } from "react-router-dom";
+import FilteredMultiSelect from "react-filtered-multiselect";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+const BOOTSTRAP_CLASSES = {
+  filter: "form-control",
+  select: "form-control",
+  button: "btn btn btn-block btn-default",
+  buttonActive: "btn btn btn-block btn-primary"
+};
 
 export default class CreateResource extends Component {
   state = {
@@ -9,7 +18,8 @@ export default class CreateResource extends Component {
     resourceTopics: [],
     resourceAttributeValues: [],
     topics: [],
-    submitted: false
+    submitted: false,
+    availableTopics: []
   };
 
   componentDidMount() {
@@ -30,11 +40,15 @@ export default class CreateResource extends Component {
       });
     });
 
-    APIManager.getAllTopics().then(topics =>
+    APIManager.getAllTopics().then(topics => {
+      let availableTopics = topics.map(topic => ({
+        id: topic["topicId"],
+        name: topic["name"]
+      }));
       this.setState({
-        topics: topics
-      })
-    );
+        availableTopics: availableTopics
+      });
+    });
   }
 
   handleFieldChange = evt => {
@@ -65,6 +79,24 @@ export default class CreateResource extends Component {
     });
   };
 
+  handleMultiSelectChange = e => {
+    console.log("multiselectChange", e);
+  };
+
+  handleDeselect(index) {
+    var resourceTopics = this.state.resourceTopics.slice();
+    resourceTopics.splice(index, 1);
+    this.setState({ resourceTopics });
+  }
+
+  handleClearSelection = e => {
+    this.setState({ resourceTopics: [] });
+  };
+  handleSelectionChange = resourceTopics => {
+    resourceTopics.sort((a, b) => a.id - b.id);
+    this.setState({ resourceTopics });
+  };
+
   render() {
     if (this.state.submitted === false) {
       return (
@@ -92,6 +124,52 @@ export default class CreateResource extends Component {
                 />
               </React.Fragment>
             ))}
+
+            <div className="row">
+              <div className="col-md-5">
+                <FilteredMultiSelect
+                  classNames={BOOTSTRAP_CLASSES}
+                  onChange={this.handleSelectionChange}
+                  options={this.state.availableTopics}
+                  selectedOptions={this.state.resourceTopics}
+                  textProp="name"
+                  valueProp="id"
+                />
+                <p className="help-block">
+                  Press Enter when there's only one matching item to select it.
+                </p>
+              </div>
+              <div className="col-md-5">
+                {this.state.resourceTopics.length === 0 && (
+                  <p>(nothing selected yet)</p>
+                )}
+                {this.state.resourceTopics.length > 0 && (
+                  <ol>
+                    {this.state.resourceTopics.map((topic, i) => (
+                      <li key={topic.id}>
+                        {`${topic.name} `}
+                        <span
+                          style={{ cursor: "pointer" }}
+                          onClick={() => this.handleDeselect(i)}
+                        >
+                          &times;
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+                {this.state.resourceTopics.length > 0 && (
+                  <button
+                    style={{ marginLeft: 20 }}
+                    className="btn btn-default"
+                    onClick={this.handleClearSelection}
+                  >
+                    Clear Selection
+                  </button>
+                )}
+              </div>
+            </div>
+
             <button type="submit">Submit</button>
           </form>
         </React.Fragment>
