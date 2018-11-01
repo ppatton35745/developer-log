@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default class ResourceType extends Component {
   state = {
-    resourceTypes: []
+    resourceType: []
   };
 
   componentDidMount() {
@@ -12,7 +12,7 @@ export default class ResourceType extends Component {
       this.props.resourceType["resourceTypeId"]
     ).then(resources =>
       this.setState({
-        resourceTypes: resources
+        resourceType: resources
       })
     );
   }
@@ -28,7 +28,7 @@ export default class ResourceType extends Component {
     return (
       <React.Fragment>
         <h1>{this.props.resourceType["name"]}</h1>
-        {this.state.resourceTypes.map(resourceType => (
+        {this.state.resourceType.map(resourceType => (
           <React.Fragment key={resourceType["resourceTypeId"]}>
             <table className="table">
               <thead>

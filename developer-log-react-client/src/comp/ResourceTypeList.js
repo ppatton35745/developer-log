@@ -33,6 +33,19 @@ export default class ResourceTypeList extends Component {
               >
                 {resourceType["name"]}
               </Link>
+              <button>
+                <Link
+                  className="topic-link"
+                  to={{
+                    pathname: `/createResource`,
+                    state: {
+                      resourceType: resourceType
+                    }
+                  }}
+                >
+                  Create {resourceType["name"]}
+                </Link>
+              </button>
             </li>
           ))}
         </ul>
