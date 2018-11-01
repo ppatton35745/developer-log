@@ -52,8 +52,8 @@ export default class CreateResource extends Component {
   }
 
   handleFieldChange = evt => {
-    const stateToChange = { topic: {} };
-    stateToChange.topic[evt.target.id] = evt.target.value;
+    const stateToChange = {};
+    stateToChange[evt.target.id] = evt.target.value;
     this.setState(stateToChange);
   };
 
@@ -69,18 +69,30 @@ export default class CreateResource extends Component {
     });
   };
 
-  createNewTopic = e => {
+  createNewResource = e => {
     e.preventDefault();
-    APIManager.createNewTopic(this.state.resource).then(response => {
+
+    const tempResourceTopics = this.state.resourceTopics.map(topic => ({
+      topicId: topic["id"]
+    }));
+    const tempResourceAttributeValues = this.state.resourceAttributeValues.map(
+      rav => ({ resourceTypeAttributeId: rav["id"], value: rav["value"] })
+    );
+    const resource = {
+      resourceTypeId: this.state.resourceTypeId,
+      name: this.state.name,
+      resourceTopics: tempResourceTopics,
+      resourceAttributeValues: tempResourceAttributeValues
+    };
+
+    console.log(resource);
+
+    APIManager.createNewResource(resource).then(response => {
       this.setState({
-        topic: response,
+        resourceTypeId: response["resourceTypeId"],
         submitted: true
       });
     });
-  };
-
-  handleMultiSelectChange = e => {
-    console.log("multiselectChange", e);
   };
 
   handleDeselect(index) {
@@ -101,11 +113,11 @@ export default class CreateResource extends Component {
     if (this.state.submitted === false) {
       return (
         <React.Fragment>
-          <form onSubmit={e => this.createNewTopic(e)}>
+          <form onSubmit={e => this.createNewResource(e)}>
             <h3>Add New Resource</h3>
-            <label htmlFor="newTopic">New Resource Name</label>
+            <label htmlFor="newResource">New Resource Name</label>
             <input
-              onChange={this.handleFieldChange}
+              onChange={e => this.handleFieldChange(e)}
               type="text"
               id="name"
               placeholder="Enter New Topic Name"
@@ -178,7 +190,7 @@ export default class CreateResource extends Component {
       return (
         <Redirect
           to={{
-            pathname: "/Topics"
+            pathname: `/ResourceTypes/${this.state.resourceTypeId}`
             // state: {
             //   topic: this.state.topic
             // }

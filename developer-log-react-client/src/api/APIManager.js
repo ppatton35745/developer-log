@@ -68,6 +68,18 @@ const APIManager = {
       },
       body: JSON.stringify(topic)
     }).then(resp => resp.json());
+  },
+
+  createNewResource: resource => {
+    return fetch(`http://localhost:5000/api/Resources`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("DevLogToken")}`
+      },
+      body: JSON.stringify(resource)
+    }).then(resp => resp.json());
   }
 };
 
