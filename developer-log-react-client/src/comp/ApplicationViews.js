@@ -10,6 +10,7 @@ import Signup from "./Signup";
 import CreateTopic from "./CreateTopic";
 import CreateResource from "./CreateResource";
 import EditResource from "./EditResource";
+import EditTopic from "./EditTopic";
 
 export default class ApplicationViews extends Component {
   // Check if credentials are in local storage
@@ -157,13 +158,29 @@ export default class ApplicationViews extends Component {
         />
         <Route
           exact
-          path="/editResource/:ResourceId"
+          path="/EditResource/:ResourceId"
           render={props => {
             if (this.isAuthenticated()) {
               return (
                 <EditResource
                   key={props.location.state.resource["resourceId"]}
                   resource={props.location.state.resource}
+                />
+              );
+            } else {
+              return <Redirect to="/Login" />;
+            }
+          }}
+        />
+        <Route
+          exact
+          path="/EditTopic/:topic"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <EditTopic
+                  key={props.location.state.topic["topicId"]}
+                  topic={props.location.state.topic}
                 />
               );
             } else {

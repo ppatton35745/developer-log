@@ -80,6 +80,55 @@ const APIManager = {
       },
       body: JSON.stringify(resource)
     }).then(resp => resp.json());
+  },
+
+  updateResource: resource => {
+    return fetch(
+      `http://localhost:5000/api/Resources/${resource["resourceId"]}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("DevLogToken")}`
+        },
+        body: JSON.stringify(resource)
+      }
+    );
+  },
+
+  updateTopic: topic => {
+    return fetch(`http://localhost:5000/api/Topics/${topic["topicId"]}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("DevLogToken")}`
+      },
+      body: JSON.stringify(topic)
+    });
+  },
+
+  deleteTopic: topicId => {
+    return fetch(`http://localhost:5000/api/Topics/${topicId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("DevLogToken")}`
+      }
+    });
+  },
+
+  deleteResource: resourceId => {
+    return fetch(`http://localhost:5000/api/Resources/${resourceId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("DevLogToken")}`
+      }
+    });
   }
 };
 

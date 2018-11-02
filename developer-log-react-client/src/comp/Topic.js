@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 
 export default class Topic extends Component {
   state = {
-    topicResourceTypes: []
+    topicResourceTypes: [],
+    deleted: false
   };
 
   componentDidMount() {
@@ -22,10 +23,32 @@ export default class Topic extends Component {
     this.setState(stateToChange);
   };
 
+  deleteTopic = e => {
+    APIManager.deleteTopic(this.props.topic["topicId"]).then(resp =>
+      this.setState({
+        deleted: true
+      })
+    );
+  };
+
   render() {
     return (
       <React.Fragment>
         <h1>{this.props.topic["name"]}</h1>
+        <button>
+          <Link
+            className="topic-link"
+            to={{
+              pathname: `/editTopic/${this.props.topic["topicId"]}`,
+              state: {
+                topic: this.props.topic
+              }
+            }}
+          >
+            Edit
+          </Link>
+          <button onClick={e => this.deleteTopic(e)}>Delete</button>
+        </button>
         {this.state.topicResourceTypes.map(topicResourceType => (
           <React.Fragment>
             <h2>{topicResourceType["name"]}</h2>

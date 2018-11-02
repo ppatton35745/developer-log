@@ -95,10 +95,10 @@ export default class EditResource extends Component {
       resourceAttributeValues: tempResourceAttributeValues
     };
 
-    console.log(resource);
+    console.log("resource About to post", resource);
 
     APIManager.updateResource(resource).then(response => {
-      APIManager.getResourceTypeResources(response["resourceTypeId"]).then(
+      APIManager.getResourceTypeResources(this.state.resourceTypeId).then(
         resources =>
           this.setState({
             resourceType: resources[0],
@@ -127,7 +127,7 @@ export default class EditResource extends Component {
     if (this.state.submitted === false) {
       return (
         <React.Fragment>
-          <form onSubmit={e => this.createNewResource(e)}>
+          <form onSubmit={e => this.updateResource(e)}>
             <h3>Edit Resource</h3>
             <label htmlFor="newResource">Name</label>
             <input
