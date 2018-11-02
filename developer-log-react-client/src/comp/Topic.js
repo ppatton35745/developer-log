@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import APIManager from "../api/APIManager";
 import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 export default class Topic extends Component {
   state = {
@@ -32,76 +33,86 @@ export default class Topic extends Component {
   };
 
   render() {
-    return (
-      <React.Fragment>
-        <h1>{this.props.topic["name"]}</h1>
-        <button>
-          <Link
-            className="topic-link"
-            to={{
-              pathname: `/editTopic/${this.props.topic["topicId"]}`,
-              state: {
-                topic: this.props.topic
-              }
-            }}
-          >
-            Edit
-          </Link>
+    if (this.state.deleted === false) {
+      return (
+        <React.Fragment>
+          <h1>{this.props.topic["name"]}</h1>
+          <button>
+            <Link
+              className="topic-link"
+              to={{
+                pathname: `/editTopic/${this.props.topic["topicId"]}`,
+                state: {
+                  topic: this.props.topic
+                }
+              }}
+            >
+              Edit
+            </Link>
+          </button>
           <button onClick={e => this.deleteTopic(e)}>Delete</button>
-        </button>
-        {this.state.topicResourceTypes.map(topicResourceType => (
-          <React.Fragment>
-            <h2>{topicResourceType["name"]}</h2>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  {topicResourceType["resourceTypeAttributes"].map(
-                    resourceTypeAttribute => (
-                      <th
-                        key={resourceTypeAttribute["resourceTypeAttributeId"]}
-                      >
-                        {resourceTypeAttribute["resourceAttribute"]["name"]}
-                      </th>
-                    )
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {topicResourceType["resources"].map(resource => (
+          {this.state.topicResourceTypes.map(topicResourceType => (
+            <React.Fragment>
+              <h2>{topicResourceType["name"]}</h2>
+              <table className="table">
+                <thead>
                   <tr>
-                    <td>
-                      <Link
-                        // key={resource["resourceId"]}
-                        className="topic-link"
-                        to={{
-                          pathname: `/Resources/${resource["resourceId"]}`,
-                          state: {
-                            resource: resource
-                          }
-                        }}
-                      >
-                        {resource["name"]}
-                      </Link>
-                    </td>
-                    {resource["resourceAttributeValues"].map(
-                      resourceAttributeValue => (
-                        <td
-                          key={
-                            resourceAttributeValue["resourceAttributeValueId"]
-                          }
+                    <th>Name</th>
+                    {topicResourceType["resourceTypeAttributes"].map(
+                      resourceTypeAttribute => (
+                        <th
+                          key={resourceTypeAttribute["resourceTypeAttributeId"]}
                         >
-                          {resourceAttributeValue["value"]}
-                        </td>
+                          {resourceTypeAttribute["resourceAttribute"]["name"]}
+                        </th>
                       )
                     )}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </React.Fragment>
-        ))}
-      </React.Fragment>
-    );
+                </thead>
+                <tbody>
+                  {topicResourceType["resources"].map(resource => (
+                    <tr>
+                      <td>
+                        <Link
+                          // key={resource["resourceId"]}
+                          className="topic-link"
+                          to={{
+                            pathname: `/Resources/${resource["resourceId"]}`,
+                            state: {
+                              resource: resource
+                            }
+                          }}
+                        >
+                          {resource["name"]}
+                        </Link>
+                      </td>
+                      {resource["resourceAttributeValues"].map(
+                        resourceAttributeValue => (
+                          <td
+                            key={
+                              resourceAttributeValue["resourceAttributeValueId"]
+                            }
+                          >
+                            {resourceAttributeValue["value"]}
+                          </td>
+                        )
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </React.Fragment>
+          ))}
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <Redirect
+          to={{
+            pathname: `/Topics`
+          }}
+        />
+      );
+    }
   }
 }

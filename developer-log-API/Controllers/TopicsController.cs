@@ -12,6 +12,10 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using Dapper;
 
 namespace developer_log_API.Controllers
 {
@@ -24,10 +28,21 @@ namespace developer_log_API.Controllers
 
         private readonly UserManager<User> _userManager;
 
-        public TopicsController(ApplicationDbContext context, UserManager<User> userManager)
+        private readonly IConfiguration _config;
+
+        public IDbConnection Connection
+        {
+            get
+            {
+                return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            }
+        }
+
+        public TopicsController(ApplicationDbContext context, UserManager<User> userManager, IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
+            _config = config;
         }
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -130,7 +145,14 @@ namespace developer_log_API.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteTopic([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
+            string sql = $@"DELETE FROM ResourceTopic WHERE TopicId = {id}";
+
+            using (IDbConnection conn = Connection)
+            {
+                await conn.ExecuteAsync(sql);
+            }
+
+                if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
