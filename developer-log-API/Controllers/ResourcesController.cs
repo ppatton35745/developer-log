@@ -365,10 +365,9 @@ namespace developer_log_API.Controllers
                 }
             }
 
-            sql += $"SELECT Max(ResourceAttributeValueId) FROM ResourceAttributeValue;";
-
             Console.WriteLine(sql);
-            Console.ReadLine();
+
+            sql += $"SELECT Max(ResourceAttributeValueId) FROM ResourceAttributeValue;";
 
             using (IDbConnection conn = Connection)
             {

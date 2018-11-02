@@ -8,13 +8,15 @@ export default class ResourceType extends Component {
   };
 
   componentDidMount() {
+    console.log("resourceTypeId", this.props.resourceType["resourceTypeId"]);
     APIManager.getResourceTypeResources(
       this.props.resourceType["resourceTypeId"]
-    ).then(resources =>
+    ).then(resources => {
+      console.log("resource", resources);
       this.setState({
         resourceType: resources
-      })
-    );
+      });
+    });
   }
 
   handleFieldChange = evt => {

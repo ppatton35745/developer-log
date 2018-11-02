@@ -102,8 +102,8 @@ export default class ApplicationViews extends Component {
             if (this.isAuthenticated()) {
               return (
                 <ResourceType
-                // key={props.location.state.resourceType["resourceTypeId"]}
-                // resourceType={props.location.state.resourceType}
+                  key={props.location.state.resourceType["resourceTypeId"]}
+                  resourceType={props.location.state.resourceType}
                 />
               );
             } else {

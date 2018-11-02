@@ -19,7 +19,8 @@ export default class CreateResource extends Component {
     resourceAttributeValues: [],
     topics: [],
     submitted: false,
-    availableTopics: []
+    availableTopics: [],
+    resourceType: []
   };
 
   componentDidMount() {
@@ -88,10 +89,14 @@ export default class CreateResource extends Component {
     console.log(resource);
 
     APIManager.createNewResource(resource).then(response => {
-      this.setState({
-        resourceTypeId: response["resourceTypeId"],
-        submitted: true
-      });
+      APIManager.getResourceTypeResources(response["resourceTypeId"]).then(
+        resources =>
+          this.setState({
+            resourceType: resources[0],
+            resourceTypeId: resources[0]["resourceTypeId"],
+            submitted: true
+          })
+      );
     });
   };
 
@@ -190,10 +195,10 @@ export default class CreateResource extends Component {
       return (
         <Redirect
           to={{
-            pathname: `/ResourceTypes/${this.state.resourceTypeId}`
-            // state: {
-            //   topic: this.state.topic
-            // }
+            pathname: `/ResourceTypes/${this.state.resourceTypeId}`,
+            state: {
+              resourceType: this.state.resourceType
+            }
           }}
         />
       );
