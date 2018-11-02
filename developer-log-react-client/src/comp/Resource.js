@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import APIManager from "../api/APIManager";
-
+import { Link } from "react-router-dom";
 export default class Resource extends Component {
   state = {
     resource: {
@@ -29,6 +29,19 @@ export default class Resource extends Component {
     return (
       <React.Fragment>
         <h1>{this.props.resource["name"]}</h1>
+        <button>
+          <Link
+            className="topic-link"
+            to={{
+              pathname: `/editResource/${this.props.resource["resourceId"]}`,
+              state: {
+                resource: this.state.resource
+              }
+            }}
+          >
+            Edit
+          </Link>
+        </button>
         <dl>
           {this.state.resource["resourceAttributeValues"].map(rav => (
             <React.Fragment key={rav["resourceAttributeValueId"]}>

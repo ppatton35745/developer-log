@@ -9,6 +9,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import CreateTopic from "./CreateTopic";
 import CreateResource from "./CreateResource";
+import EditResource from "./EditResource";
 
 export default class ApplicationViews extends Component {
   // Check if credentials are in local storage
@@ -147,6 +148,22 @@ export default class ApplicationViews extends Component {
                 <CreateResource
                   key={props.location.state.resourceType["resourceTypeId"]}
                   resourceType={props.location.state.resourceType}
+                />
+              );
+            } else {
+              return <Redirect to="/Login" />;
+            }
+          }}
+        />
+        <Route
+          exact
+          path="/editResource/:ResourceId"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <EditResource
+                  key={props.location.state.resource["resourceId"]}
+                  resource={props.location.state.resource}
                 />
               );
             } else {
