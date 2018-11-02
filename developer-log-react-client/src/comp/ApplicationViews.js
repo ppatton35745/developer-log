@@ -101,6 +101,8 @@ export default class ApplicationViews extends Component {
         <Route
           path="/ResourceTypes/:ResourceTypeId"
           render={props => {
+            console.log("I hit the resource TYpes route");
+            console.log(props.location.state.resourceType);
             if (this.isAuthenticated()) {
               return (
                 <ResourceType
