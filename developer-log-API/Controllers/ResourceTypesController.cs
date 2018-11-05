@@ -41,7 +41,7 @@ namespace developer_log_API.Controllers
             User user = _context.User.Single(u => u.UserName == userName);
 
             List<ResourceType> items = _context.ResourceType
-                .Where(x => x.Resources.Where(r => r.UserId == user.Id).Count() > 0)
+                .Include(x => x.ResourceTypeAttributes)
                 .ToList();
 
             return items;
