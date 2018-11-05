@@ -50,6 +50,9 @@ namespace developer_log_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetResources(int? resourceTypeId, int? topicId)
         {
+            string userName = User.Identity.Name;
+            User user = _context.User.Single(u => u.UserName == userName);
+
             string sql = $@"SELECT rt.ResourceTypeId
 	                            ,rt.Name 
 	                            ,rta.ResourceTypeAttributeId
@@ -65,7 +68,7 @@ namespace developer_log_API.Controllers
                             JOIN [Resource] r on r.ResourceTypeId = rt.ResourceTypeId
 	                            JOIN ResourceAttributeValue rav on rav.ResourceTypeAttributeId = rta.ResourceTypeAttributeId and rav.ResourceId = r.ResourceId
                                 LEFT JOIN ResourceTopic rtop on rtop.ResourceId = r.ResourceId
-                            WHERE 1=1 ";
+                            WHERE r.UserId = '{user.Id}' ";
 
             if (resourceTypeId != null)
             {
@@ -321,60 +324,69 @@ namespace developer_log_API.Controllers
                 //return CreatedAtRoute("GetResource", new { id = resourceId }, resource);
             }
 
-            sql = $@"INSERT INTO ResourceTopic
+            if (resource.ResourceTopics.Count > 0)
+            {
+                sql = $@"INSERT INTO ResourceTopic
             (ResourceId, TopicId)
             VALUES ";
 
-            for (int i = 0; i < resource.ResourceTopics.Count; i++)
-            {
-                if (i == 0)
+                for (int i = 0; i < resource.ResourceTopics.Count; i++)
                 {
-                    sql += $"({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) ";
+                    if (i == 0)
+                    {
+                        sql += $"({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) ";
+                    }
+                    else
+                    {
+                        sql += $",({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) ";
+                    }
                 }
-                else
+
+                sql += $"SELECT Max(ResourceTopicId) FROM ResourceTopic;";
+
+                using (IDbConnection conn = Connection)
                 {
-                    sql += $",({resource.ResourceId}, {resource.ResourceTopics.ElementAt(i).TopicId}) ";
+                    var resourceTopicId = (await conn.QueryAsync<int>(sql)).Single();
+                    //return CreatedAtRoute("GetResource", new { id = resourceId }, resource);
                 }
             }
 
-            sql += $"SELECT Max(ResourceTopicId) FROM ResourceTopic;";
-
-            using (IDbConnection conn = Connection)
+            if (resource.ResourceAttributeValues.Count > 0)
             {
-                var resourceTopicId = (await conn.QueryAsync<int>(sql)).Single();
-                //return CreatedAtRoute("GetResource", new { id = resourceId }, resource);
-            }
 
-            sql = $@"INSERT INTO ResourceAttributeValue
+                sql = $@"INSERT INTO ResourceAttributeValue
             ( ResourceId, ResourceTypeAttributeId, Value)
             VALUES ";
 
-            for (int i = 0; i < resource.ResourceAttributeValues.Count; i++)
-            {
-                if (i == 0)
+                for (int i = 0; i < resource.ResourceAttributeValues.Count; i++)
                 {
-                    sql += $@"({resource.ResourceId}, 
+                    if (i == 0)
+                    {
+                        sql += $@"({resource.ResourceId}, 
                                 {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
                                 '{resource.ResourceAttributeValues.ElementAt(i).Value}') ";
+                    }
+                    else
+                    {
+                        sql += $@",({resource.ResourceId}, 
+                                {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
+                                '{resource.ResourceAttributeValues.ElementAt(i).Value}') ";
+                    }
                 }
-                else
+
+                Console.WriteLine(sql);
+
+                sql += $"SELECT Max(ResourceAttributeValueId) FROM ResourceAttributeValue;";
+
+                using (IDbConnection conn = Connection)
                 {
-                    sql += $@",({resource.ResourceId}, 
-                                {resource.ResourceAttributeValues.ElementAt(i).ResourceTypeAttributeId},
-                                '{resource.ResourceAttributeValues.ElementAt(i).Value}') ";
+                    var resourceAttributeValueId = (await conn.QueryAsync<int>(sql)).Single();
+
                 }
             }
 
-            Console.WriteLine(sql);
+            return CreatedAtRoute("GetResource", new { id = resource.ResourceId }, resource);
 
-            sql += $"SELECT Max(ResourceAttributeValueId) FROM ResourceAttributeValue;";
-
-            using (IDbConnection conn = Connection)
-            {
-                var resourceAttributeValueId = (await conn.QueryAsync<int>(sql)).Single();
-                return CreatedAtRoute("GetResource", new { id = resource.ResourceId }, resource);
-            }
-            
         }
 
         // DELETE: api/Topics/5

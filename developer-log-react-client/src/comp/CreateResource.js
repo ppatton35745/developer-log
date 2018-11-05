@@ -20,7 +20,8 @@ export default class CreateResource extends Component {
     topics: [],
     submitted: false,
     availableTopics: [],
-    resourceType: []
+    resourceType: [],
+    errors: {}
   };
 
   componentDidMount() {
@@ -58,6 +59,21 @@ export default class CreateResource extends Component {
     this.setState(stateToChange);
   };
 
+  handleValidation() {
+    let name = this.state.name;
+    let errors = {};
+    let formIsValid = true;
+
+    //Name
+    if (!(name.length > 0)) {
+      formIsValid = false;
+      errors["name"] = "Cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  }
+
   changeAttribute = evt => {
     const tempRavs = this.state.resourceAttributeValues;
     const indexToChange = tempRavs.findIndex(
@@ -72,6 +88,10 @@ export default class CreateResource extends Component {
 
   createNewResource = e => {
     e.preventDefault();
+
+    if (!this.handleValidation()) {
+      return;
+    }
 
     const tempResourceTopics = this.state.resourceTopics.map(topic => ({
       topicId: topic["id"]
@@ -119,16 +139,17 @@ export default class CreateResource extends Component {
       return (
         <React.Fragment>
           <form onSubmit={e => this.createNewResource(e)}>
-            <h3>Add New Resource</h3>
-            <label htmlFor="newResource">New Resource Name</label>
+            <h3>Add {this.props.resourceType["name"]}</h3>
+            <label htmlFor="newResource">Name</label>
             <input
               onChange={e => this.handleFieldChange(e)}
               type="text"
               id="name"
-              placeholder="Enter New Topic Name"
+              placeholder="Enter Name"
               required=""
             />
-
+            <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
+            <br />
             {this.state.resourceAttributeValues.map(rav => (
               <React.Fragment>
                 <label>{rav["label"]}</label>
@@ -136,12 +157,13 @@ export default class CreateResource extends Component {
                   onChange={e => this.changeAttribute(e)}
                   type="text"
                   id={rav["id"]}
-                  placeholder="Enter New Topic Name"
+                  placeholder={`Enter ${rav["label"]}`}
                   required=""
                 />
+                <br />
               </React.Fragment>
             ))}
-
+            <label>Select Relevant Topics</label>
             <div className="row">
               <div className="col-md-5">
                 <FilteredMultiSelect

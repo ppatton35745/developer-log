@@ -4,29 +4,50 @@ import { Redirect } from "react-router-dom";
 
 export default class CreateTopic extends Component {
   state = {
-    topic: { name: "" },
+    fields: {},
+    errors: {},
+    topic: {},
     submitted: false
   };
 
   componentDidMount() {}
 
   handleFieldChange = evt => {
-    const stateToChange = { topic: {} };
-    stateToChange.topic[evt.target.id] = evt.target.value;
-    this.setState(stateToChange);
+    let fields = this.state.fields;
+    fields[evt.target.id] = evt.target.value;
+    this.setState({ fields });
   };
-  //   createNewTopic = e => {
-  //     e.preventDefault();
-  //     APIManager.createNewTopic(this.state.topic);
-  //   };
+
+  handleValidation() {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //Name
+    if (!fields["name"] || !(fields["name"].length > 0)) {
+      formIsValid = false;
+      errors["name"] = "Cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  }
+
   createNewTopic = e => {
     e.preventDefault();
-    APIManager.createNewTopic(this.state.topic).then(response => {
-      this.setState({
-        topic: response,
-        submitted: true
-      });
-    });
+
+    if (!this.handleValidation()) {
+      return;
+    }
+
+    APIManager.createNewTopic({ name: this.state.fields["name"] }).then(
+      response => {
+        this.setState({
+          topic: response,
+          submitted: true
+        });
+      }
+    );
   };
 
   render() {
@@ -37,12 +58,14 @@ export default class CreateTopic extends Component {
             <h3>Add New Topic</h3>
             <label htmlFor="newTopic">New Topic</label>
             <input
-              onChange={this.handleFieldChange}
+              onChange={e => this.handleFieldChange(e)}
               type="text"
               id="name"
               placeholder="Enter New Topic Name"
               required=""
             />
+            <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
+            <br />
             <button type="submit">Submit</button>
           </form>
         </React.Fragment>

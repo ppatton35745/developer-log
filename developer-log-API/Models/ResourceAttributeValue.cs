@@ -25,7 +25,7 @@ namespace developer_log_API.Models
         //[JsonIgnore]
         public Resource Resource { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(50)]
         public string Value { get; set; }
     }

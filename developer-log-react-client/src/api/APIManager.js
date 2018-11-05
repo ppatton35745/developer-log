@@ -98,6 +98,7 @@ const APIManager = {
   },
 
   updateTopic: topic => {
+    console.log("updated topic", topic);
     return fetch(`http://localhost:5000/api/Topics/${topic["topicId"]}`, {
       method: "PUT",
       headers: {
