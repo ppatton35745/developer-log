@@ -52,7 +52,7 @@ export default class Topic extends Component {
           </button>
           <button onClick={e => this.deleteTopic(e)}>Delete</button>
           {this.state.topicResourceTypes.map(topicResourceType => (
-            <React.Fragment>
+            <div key={topicResourceType["topicResourceTypeId"]}>
               <h2>{topicResourceType["name"]}</h2>
               <table className="table">
                 <thead>
@@ -71,10 +71,9 @@ export default class Topic extends Component {
                 </thead>
                 <tbody>
                   {topicResourceType["resources"].map(resource => (
-                    <tr>
+                    <tr key={"tr" + resource["resourceId"]}>
                       <td>
                         <Link
-                          // key={resource["resourceId"]}
                           className="topic-link"
                           to={{
                             pathname: `/Resources/${resource["resourceId"]}`,
@@ -101,7 +100,7 @@ export default class Topic extends Component {
                   ))}
                 </tbody>
               </table>
-            </React.Fragment>
+            </div>
           ))}
         </React.Fragment>
       );

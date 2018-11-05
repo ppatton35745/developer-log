@@ -50,6 +50,9 @@ namespace developer_log_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetResources(int? resourceTypeId, int? topicId)
         {
+            string userName = User.Identity.Name;
+            User user = _context.User.Single(u => u.UserName == userName);
+
             string sql = $@"SELECT rt.ResourceTypeId
 	                            ,rt.Name 
 	                            ,rta.ResourceTypeAttributeId
@@ -65,7 +68,7 @@ namespace developer_log_API.Controllers
                             JOIN [Resource] r on r.ResourceTypeId = rt.ResourceTypeId
 	                            JOIN ResourceAttributeValue rav on rav.ResourceTypeAttributeId = rta.ResourceTypeAttributeId and rav.ResourceId = r.ResourceId
                                 LEFT JOIN ResourceTopic rtop on rtop.ResourceId = r.ResourceId
-                            WHERE 1=1 ";
+                            WHERE r.UserId = '{user.Id}' ";
 
             if (resourceTypeId != null)
             {
