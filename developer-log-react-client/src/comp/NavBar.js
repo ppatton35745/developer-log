@@ -24,7 +24,7 @@ export default class NavBar extends Component {
         <Link to="/Topics">Topics</Link>
         <Link to="/ResourceTypes">Resources</Link>
         <Link to="/Login">Login</Link>
-        <Link to="/Signup">Signup</Link>
+        {/* <Link to="/Signup">Signup</Link> */}
       </RsNavBar>
     );
   }

@@ -5,23 +5,43 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default class EditResource extends Component {
   state = {
-    name: this.props.topic.name,
+    fields: { name: this.props.topic.name },
+    errors: {},
     submitted: false
   };
 
   componentDidMount() {}
 
   handleFieldChange = evt => {
-    const stateToChange = {};
-    stateToChange[evt.target.id] = evt.target.value;
-    this.setState(stateToChange);
+    let fields = this.state.fields;
+    fields[evt.target.id] = evt.target.value;
+    this.setState({ fields });
   };
+
+  handleValidation() {
+    let fields = this.state.fields;
+    let errors = {};
+    let formIsValid = true;
+
+    //Name
+    if (!fields["name"] || !(fields["name"].length > 0)) {
+      formIsValid = false;
+      errors["name"] = "Cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  }
 
   updateTopic = e => {
     e.preventDefault();
 
-    const updatedTopic = this.props.topic;
-    updatedTopic["name"] = this.state.name;
+    if (!this.handleValidation()) {
+      return;
+    }
+
+    let updatedTopic = this.props.topic;
+    updatedTopic["name"] = this.state.fields["name"];
 
     APIManager.updateTopic(updatedTopic).then(response => {
       this.setState({
@@ -41,7 +61,7 @@ export default class EditResource extends Component {
               onChange={e => this.handleFieldChange(e)}
               type="text"
               id="name"
-              value={this.state.name}
+              value={this.state.fields["name"]}
               required=""
             />
 
