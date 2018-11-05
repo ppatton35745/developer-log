@@ -21,7 +21,8 @@ export default class EditResource extends Component {
     topics: [],
     submitted: false,
     availableTopics: [],
-    resourceType: []
+    resourceType: [],
+    errors: []
   };
 
   componentDidMount() {
@@ -66,6 +67,21 @@ export default class EditResource extends Component {
     this.setState(stateToChange);
   };
 
+  handleValidation() {
+    let name = this.state.name;
+    let errors = {};
+    let formIsValid = true;
+
+    //Name
+    if (!(name.length > 0)) {
+      formIsValid = false;
+      errors["name"] = "Cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  }
+
   changeAttribute = evt => {
     const tempRavs = this.state.resourceAttributeValues;
     const indexToChange = tempRavs.findIndex(
@@ -80,6 +96,10 @@ export default class EditResource extends Component {
 
   updateResource = e => {
     e.preventDefault();
+
+    if (!this.handleValidation()) {
+      return;
+    }
 
     const tempResourceTopics = this.state.resourceTopics.map(topic => ({
       topicId: topic["id"]
@@ -128,7 +148,7 @@ export default class EditResource extends Component {
       return (
         <React.Fragment>
           <form onSubmit={e => this.updateResource(e)}>
-            <h3>Edit Resource</h3>
+            <h3>Edit {this.props.resource.resourceType["name"]}</h3>
             <label htmlFor="newResource">Name</label>
             <input
               onChange={e => this.handleFieldChange(e)}
@@ -137,7 +157,8 @@ export default class EditResource extends Component {
               value={this.state.name}
               required=""
             />
-
+            <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
+            <br />
             {this.state.resourceAttributeValues.map(rav => (
               <React.Fragment>
                 <label>{rav["label"]}</label>
@@ -148,9 +169,10 @@ export default class EditResource extends Component {
                   value={rav["value"]}
                   required=""
                 />
+                <br />
               </React.Fragment>
             ))}
-
+            <label>Edit Relevant Topics</label>
             <div className="row">
               <div className="col-md-5">
                 <FilteredMultiSelect
